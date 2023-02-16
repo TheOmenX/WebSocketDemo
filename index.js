@@ -1,45 +1,32 @@
-const express = require('express');                     // Web framework for nodejs  
-const app = express();
-const http = require('http')                            // HTTP Library 
-const server = http.createServer(app); 
+'use strict';
 
-// Importing the required modules
-const WebSocketServer = require('ws');
- 
-// Creating a new websocket server
-const wss = new WebSocketServer.Server({ port: 8080 })
+let WSServer = require('ws').Server;
+let server = require('http').createServer();
+let app = require('./app')
 
-
-
-app.get("/", (req, res) => {
-    res.send("Hello World!")
-})
-
-
-server.listen(process.env.PORT || 8000, () => {
-    console.log(`listening on http://localhost:${process.env.PORT || 8000}/`);
+let wss = new WSServer({
+    server: server
 });
+  
+server.on('request', app);
 
- 
-// Creating connection using websocket
-wss.on("connection", ws => {
-    console.log("new client connected");
- 
-    // sending message to client
-    ws.send('Welcome, you are connected!');
- 
-    //on message from client
-    ws.on("message", data => {
-        console.log(`Client has sent us: ${data}`)
+wss.on('connection', function connection(ws) {
+    console.log('user connected')
+
+    ws.on('message', function incoming(message) {
+      
+      console.log(`received: ${message}`);
+      
+      ws.send(JSON.stringify({
+  
+        answer: 42
+      }));
     });
- 
-    // handling what to do when clients disconnects from server
-    ws.on("close", () => {
-        console.log("the client has connected");
-    });
-    // handling client connection error
-    ws.onerror = function () {
-        console.log("Some Error occurred")
-    }
-});
-console.log("The WebSocket server is running on port 8080");
+  });
+  
+  
+  server.listen(process.env.PORT || 8000, function() {
+  
+    console.log(`http/ws server listening on ${process.env.PORT || 8000}`);
+  });
+
