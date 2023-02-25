@@ -15,8 +15,8 @@ const activeTables = []
 
 const table = {
   1234: [
-      {id: 2, name: "Koffie", count: 4, price: 2.9, comment: [], time: Date.now()},
-      {id: 4, name: "Appeltaart", count: 1, price: 4.2, comment: ["Stop"], time: Date.now()}
+      {id: "2", name: "Koffie", count: 4, price: 2.9, comments: [], time: Date.now()},
+      {id: "4", name: "Appeltaart", count: 1, price: 4.2, comments: ["Stop"], time: Date.now()}
     ]
 }
 
